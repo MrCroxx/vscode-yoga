@@ -41,19 +41,17 @@ export class YogaWidget {
 
 
     private onChangeValue(value: string): void {
-        this.find(value, false);
+        this.find(value, false, false);
     }
 
-    private find(searchString: string, matchCase: boolean): void {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-
+    private find(searchString: string, matchCase: boolean, activeEditorOnly: boolean): void {
+        const editors = activeEditorOnly && vscode.window.activeTextEditor ? [vscode.window.activeTextEditor] : [];
+        !activeEditorOnly && editors.push(...vscode.window.visibleTextEditors);
 
         const trap = this.traps.get(searchString.slice(-1));
         if (trap !== undefined) {
-            editor.selections = [new vscode.Selection(trap.range.start, trap.range.start)];
+            vscode.window.showTextDocument(trap.editor.document.uri, { preview: false, viewColumn: trap.editor.viewColumn });
+            trap.editor.selections = [new vscode.Selection(trap.range.start, trap.range.start)];
             this.hide();
         }
 
@@ -75,25 +73,28 @@ export class YogaWidget {
 
         const matches = [];
 
-        for (const visibleRange of editor.visibleRanges) {
-            for (let i = visibleRange.start.line; i <= visibleRange.end.line; i++) {
-                const line = editor.document.lineAt(i);
-                const text = matchCase ? line.text : line.text.toLowerCase();
 
-                let index = 0;
-                while (true) {
-                    index = text.indexOf(searchString, index);
-                    if (index === -1) { break; }
+        for (const editor of editors) {
+            for (const visibleRange of editor.visibleRanges) {
+                for (let i = visibleRange.start.line; i <= visibleRange.end.line; i++) {
+                    const line = editor.document.lineAt(i);
+                    const text = matchCase ? line.text : line.text.toLowerCase();
 
-                    const startPosition = new vscode.Position(i, index);
-                    const endPosition = new vscode.Position(i, index + searchString.length);
-                    const matchRange = new vscode.Range(startPosition, endPosition);
-                    const nextCharacter = endPosition.character < text.length ? text.charAt(endPosition.character) : "";
+                    let index = 0;
+                    while (true) {
+                        index = text.indexOf(searchString, index);
+                        if (index === -1) { break; }
 
-                    labels.delete(nextCharacter);
-                    matches.push(new Match(matchRange, nextCharacter));
+                        const startPosition = new vscode.Position(i, index);
+                        const endPosition = new vscode.Position(i, index + searchString.length);
+                        const matchRange = new vscode.Range(startPosition, endPosition);
+                        const nextCharacter = endPosition.character < text.length ? text.charAt(endPosition.character) : "";
 
-                    index += searchString.length;
+                        labels.delete(nextCharacter);
+                        matches.push(new Match(editor, matchRange, nextCharacter));
+
+                        index += searchString.length;
+                    }
                 }
             }
         }
@@ -101,7 +102,7 @@ export class YogaWidget {
         for (const match of matches) {
             const label = labels.values().next().value || "";
             labels.delete(label);
-            const candidate = new Candidate(label, match.range, match.nextCharacter);
+            const candidate = new Candidate(label, match.editor, match.range, match.nextCharacter);
             this.candidates.push(candidate);
             if (candidate.label !== "") {
                 this.traps.set(candidate.label, candidate);
@@ -109,7 +110,7 @@ export class YogaWidget {
         }
 
         for (const candidate of this.candidates) {
-            editor.setDecorations(candidate.decorationType, [candidate.range]);
+            candidate.editor.setDecorations(candidate.decorationType, [candidate.range]);
         }
     }
 
@@ -124,10 +125,12 @@ export class YogaWidget {
 }
 
 class Match {
+    public editor: vscode.TextEditor;
     public range: vscode.Range;
     public nextCharacter: string;
 
-    constructor(range: vscode.Range, nextCharacter: string) {
+    constructor(editor: vscode.TextEditor, range: vscode.Range, nextCharacter: string) {
+        this.editor = editor;
         this.range = range;
         this.nextCharacter = nextCharacter;
     }
@@ -135,12 +138,14 @@ class Match {
 
 class Candidate {
     public label: string;
+    public editor: vscode.TextEditor;
     public range: vscode.Range;
     public nextCharacter: string;
     public decorationType: vscode.TextEditorDecorationType;
 
-    constructor(label: string, range: vscode.Range, nextCharacter: string) {
+    constructor(label: string, editor: vscode.TextEditor, range: vscode.Range, nextCharacter: string) {
         this.label = label;
+        this.editor = editor;
         this.range = range;
         this.nextCharacter = nextCharacter;
         this.decorationType = vscode.window.createTextEditorDecorationType({
@@ -165,18 +170,4 @@ class Candidate {
             } : undefined,
         });
     }
-
-
-
-
 }
-
-// class Match {
-//     public range: vscode.Range;
-//     public nextCharacter: string;
-
-//     constructor(range: vscode.Range, next: string) {
-//         this.range = range;
-//         this.nextCharacter = next;
-//     }
-// }
