@@ -1,9 +1,22 @@
 import { assert } from "console";
 import * as vscode from "vscode";
 
-export class YogaWidget {
-    public isActive = false;
 
+export class YogaOptions {
+    constructor(
+        public readonly activeEditorOnly: boolean
+    ) { }
+}
+
+export class YogaContext {
+    constructor(
+        public readonly matchCase: boolean
+    ) { }
+}
+
+
+export class Yoga {
+    public isActive = false;
 
     private readonly alphabet: string = "abcdefghijklmnopqrstuvwxyz";
     private readonly quickPick: vscode.QuickPick<vscode.QuickPickItem> =
@@ -11,11 +24,14 @@ export class YogaWidget {
 
     private candidates: Candidate[] = [];
     private traps: Map<string, Candidate> = new Map();
+    private lastSearchString: string = "";
 
     constructor(
-        private readonly context: vscode.ExtensionContext,
+        private readonly extensionContext: vscode.ExtensionContext,
+        private readonly options: YogaOptions,
+        private readonly context: YogaContext,
     ) {
-        this.quickPick.title = "Yoga Finder";
+        this.quickPick.title = context.matchCase ? "Yoga Finder (Case sensitive)" : "Yoga Finder";
         this.quickPick.placeholder = "Find";
 
         this.quickPick.onDidHide(this.hide.bind(this));
@@ -39,27 +55,30 @@ export class YogaWidget {
         this.quickPick.dispose();
     }
 
-
     private onChangeValue(value: string): void {
-        this.find(value, false, false);
+        this.find(value);
     }
 
-    private find(searchString: string, matchCase: boolean, activeEditorOnly: boolean): void {
-        const editors = activeEditorOnly && vscode.window.activeTextEditor ? [vscode.window.activeTextEditor] : [];
-        !activeEditorOnly && editors.push(...vscode.window.visibleTextEditors);
+    private find(searchString: string): void {
+        // Update last search string.
+        const lastSearchString = this.lastSearchString;
+        this.lastSearchString = searchString;
 
-        const trap = this.traps.get(searchString.slice(-1));
-        if (trap !== undefined) {
-            vscode.window.showTextDocument(trap.editor.document.uri, { preview: false, viewColumn: trap.editor.viewColumn });
-            trap.editor.selections = [new vscode.Selection(trap.range.start, trap.range.start)];
-            this.hide();
+        // Get all involved editors.
+        const editors = this.getInvolvedEditors();
+
+        // Check if hits a trap.
+        if (searchString.length > lastSearchString.length && this.trap(searchString.slice(-1))) {
+            return;
         }
 
+        // Clear last state.
         this.dispose();
         assert(this.candidates.length === 0);
         assert(this.traps.size === 0);
 
-        searchString = matchCase ? searchString : searchString.toLowerCase();
+        // Handle cases.
+        searchString = this.context.matchCase ? searchString : searchString.toLowerCase();
 
         if (searchString.length === 0) {
             return;
@@ -70,15 +89,13 @@ export class YogaWidget {
             labels.add(label);
         }
 
-
         const matches = [];
-
 
         for (const editor of editors) {
             for (const visibleRange of editor.visibleRanges) {
                 for (let i = visibleRange.start.line; i <= visibleRange.end.line; i++) {
                     const line = editor.document.lineAt(i);
-                    const text = matchCase ? line.text : line.text.toLowerCase();
+                    const text = this.context.matchCase ? line.text : line.text.toLowerCase();
 
                     let index = 0;
                     while (true) {
@@ -114,6 +131,26 @@ export class YogaWidget {
         }
     }
 
+    // Get all involved editors.
+    private getInvolvedEditors(): vscode.TextEditor[] {
+        let editors = [];
+        this.options.activeEditorOnly && vscode.window.activeTextEditor && editors.push(vscode.window.activeTextEditor!);
+        !this.options.activeEditorOnly && editors.push(...vscode.window.visibleTextEditors);
+        return editors;
+    }
+
+    // Jump to the position if hit a trap.
+    private trap(input: string): boolean {
+        const trap = this.traps.get(input);
+        if (!trap) {
+            return false;
+        }
+        vscode.window.showTextDocument(trap.editor.document.uri, { preview: false, viewColumn: trap.editor.viewColumn });
+        trap.editor.selections = [new vscode.Selection(trap.range.start, trap.range.start)];
+        this.hide();
+        return true;
+    }
+
     // Dispose last round matches and candidates.
     private dispose() {
         for (const candidate of this.candidates) {
@@ -122,32 +159,26 @@ export class YogaWidget {
         this.candidates = [];
         this.traps.clear();
     }
+
 }
 
 class Match {
-    public editor: vscode.TextEditor;
-    public range: vscode.Range;
-    public nextCharacter: string;
-
-    constructor(editor: vscode.TextEditor, range: vscode.Range, nextCharacter: string) {
-        this.editor = editor;
-        this.range = range;
-        this.nextCharacter = nextCharacter;
-    }
+    constructor(
+        public readonly editor: vscode.TextEditor,
+        public readonly range: vscode.Range,
+        public readonly nextCharacter: string
+    ) { }
 }
 
 class Candidate {
-    public label: string;
-    public editor: vscode.TextEditor;
-    public range: vscode.Range;
-    public nextCharacter: string;
-    public decorationType: vscode.TextEditorDecorationType;
+    public readonly decorationType: vscode.TextEditorDecorationType;
 
-    constructor(label: string, editor: vscode.TextEditor, range: vscode.Range, nextCharacter: string) {
-        this.label = label;
-        this.editor = editor;
-        this.range = range;
-        this.nextCharacter = nextCharacter;
+    constructor(
+        public readonly label: string,
+        public readonly editor: vscode.TextEditor,
+        public readonly range: vscode.Range,
+        public readonly nextCharacter: string
+    ) {
         this.decorationType = vscode.window.createTextEditorDecorationType({
             backgroundColor: "var(--vscode-editor-findMatchHighlightBackground)",
             light: label !== "" ? {

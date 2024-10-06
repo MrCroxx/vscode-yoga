@@ -18,13 +18,33 @@
     "commands": [
       {
         "command": "yoga.find",
-        "title": "yoga find: Find and jump."
+        "title": "Yoga Find"
+      },
+      {
+        "command": "yoga.findWithCase",
+        "title": "Yoga Find (Case Sensitive)"
       }
     ],
     "keybindings": [
       {
         "command": "yoga.find",
         "key": "ctrl+alt+s"
+      },
+      {
+        "command": "yoga.findWithCase",
+        "key": "ctrl+alt+shift+s"
+      }
+    ],
+    "configuration": [
+      {
+        "title": "Yoga",
+        "properties": {
+          "yoga.activeEditorOnly": {
+            "type": "boolean",
+            "default": false,
+            "description": "Only find matches in the active text editor."
+          }
+        }
       }
     ]
   },
