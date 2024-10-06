@@ -6,6 +6,10 @@
   "publisher": "MrCroxx",
   "license": "MIT",
   "icon": "assets/logo.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrcroxx/vscode-yoga"
+  },
   "engines": {
     "vscode": "^1.77.0"
   },
