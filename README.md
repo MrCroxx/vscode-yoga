@@ -2,72 +2,43 @@
 
 Yet another leap.nvim for vscode. (*Yoga* is not a recursive acronym. 🤣)
 
-![demo](https://raw.githubusercontent.com/mrcroxx/vscode-yoga/main/assets/screenshot/demo.gif)
+![logo](https://raw.githubusercontent.com/mrcroxx/vscode-yoga/main/assets/logo.png)
 
-A general-purpose motion plugin for vscode. Search and jump to anywhere.
+A general-purpose motion plugin for vscode. Search and jump to anywhere!
+
+## Usage
+
+1. Open finder with `ctrl + alt + s` / `control + option + s`.
+2. Enter the characters following the position you want to jump to.
+3. Confirm the label to jump!
+
+![demo](https://raw.githubusercontent.com/mrcroxx/vscode-yoga/main/assets/screenshot/demo.gif)
 
 ## Features
 
-***TBD ... ...***
+- Search with a string with any length.
+- Jump between tabs.
+- Enable/disable case sensitive search.
 
-## Requirements
+## Default Shortcuts
 
-***TBD ... ...***
+- `ctrl + alt + s` / `control + option + s`: Yoga Find.
+- `ctrl + alt + shift + s` / `control + option + shift + s`: Yoga Find (Case Sensitive).
 
 ## Extension Settings
 
-***TBD ... ...***
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-***TBD ... ...***
+| properties | comment | type | default |
+| - | - | - | - |
+| `yoga.activeEditorOnly` | Only find matches in the active text editor. | `boolean` | `false` |
 
 ## Release Notes
 
-***TBD ... ...***
-
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
+Initial release.
 
-### 1.0.1
+Changes:
 
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- Search and jump.
+- Enable/disable case sensitive search.
+- Enable/disable search between tabs.

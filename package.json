@@ -5,7 +5,7 @@
   "version": "0.0.1",
   "publisher": "MrCroxx",
   "license": "MIT",
-  "icon": "assets/yoga.png",
+  "icon": "assets/logo.png",
   "engines": {
     "vscode": "^1.77.0"
   },
