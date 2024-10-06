@@ -1,22 +1,22 @@
-# yoga README
+# Yoga
 
-This is the README for your extension "yoga". After writing up a brief description, we recommend including the following sections.
+Yet another leap.nvim for vscode. (*Yoga* is not a recursive acronym. 🤣)
+
+![demo](https://raw.githubusercontent.com/mrcroxx/vscode-yoga/main/assets/screenshot/demo.gif)
+
+A general-purpose motion plugin for vscode. Search and jump to anywhere.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+***TBD ... ...***
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+***TBD ... ...***
 
 ## Extension Settings
+
+***TBD ... ...***
 
 Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
 
@@ -29,9 +29,11 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+***TBD ... ...***
 
 ## Release Notes
+
+***TBD ... ...***
 
 Users appreciate release notes as you update your extension.
 
