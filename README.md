@@ -33,7 +33,13 @@ A general-purpose motion plugin for vscode. Search and jump to anywhere!
 
 ## Release Notes
 
-### 1.0.0
+### 0.0.2
+
+Changes:
+
+- Support customized alphabet.
+
+### 0.0.1
 
 Initial release.
 
