@@ -34,5 +34,7 @@ function getConfiguration<Type>(name: string): Type {
 
 function getYogaOptions(): YogaOptions {
 	const activeEditorOnly = getConfiguration<boolean>("activeEditorOnly");
-	return new YogaOptions(activeEditorOnly);
+	const alphabet = getConfiguration<string>("alphabet");
+
+	return new YogaOptions(activeEditorOnly, alphabet);
 }

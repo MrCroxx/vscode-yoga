@@ -16,6 +16,30 @@
   "categories": [
     "Other"
   ],
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "keywords": [
+    "leap",
+    "leap.nvim",
+    "vim",
+    "neovim",
+    "jump",
+    "jumpy",
+    "cursor",
+    "find",
+    "finder",
+    "quick",
+    "rapid",
+    "move",
+    "movement",
+    "navigation",
+    "util",
+    "utility",
+    "efficiency",
+    "shortcut"
+  ],
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
@@ -47,6 +71,11 @@
             "type": "boolean",
             "default": false,
             "description": "Only find matches in the active text editor."
+          },
+          "yoga.alphabet": {
+            "type": "string",
+            "default": "abcdefghijklmnopqrstuvwxyz",
+            "description": "Alphabet for label generation."
           }
         }
       }

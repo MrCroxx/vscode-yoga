@@ -4,7 +4,8 @@ import * as vscode from "vscode";
 
 export class YogaOptions {
     constructor(
-        public readonly activeEditorOnly: boolean
+        public readonly activeEditorOnly: boolean,
+        public readonly alphabet: string,
     ) { }
 }
 
@@ -18,7 +19,6 @@ export class YogaContext {
 export class Yoga {
     public isActive = false;
 
-    private readonly alphabet: string = "abcdefghijklmnopqrstuvwxyz";
     private readonly quickPick: vscode.QuickPick<vscode.QuickPickItem> =
         vscode.window.createQuickPick();
 
@@ -85,7 +85,7 @@ export class Yoga {
         }
 
         const labels = new Set<string>();
-        for (const label of this.alphabet) {
+        for (const label of this.options.alphabet) {
             labels.add(label);
         }
 
