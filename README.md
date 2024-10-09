@@ -30,6 +30,7 @@ A general-purpose motion plugin for vscode. Search and jump to anywhere!
 | properties | comment | type | default |
 | - | - | - | - |
 | `yoga.activeEditorOnly` | Only find matches in the active text editor. | `boolean` | `false` |
+| `yoga.alphabet` | Alphabet for label generation. | `string` | `"abcdefghijklmnopqrstuvwxyz"` |
 
 ## Release Notes
 
