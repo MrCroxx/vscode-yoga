@@ -24,6 +24,8 @@ A general-purpose motion plugin for vscode. Search and jump to anywhere!
 
 - `ctrl + alt + s` / `control + option + s`: Yoga Find.
 - `ctrl + alt + shift + s` / `control + option + shift + s`: Yoga Find (Case Sensitive).
+- `ctrl + alt + d` / `control + option + d`: Yoga Find End.
+- `ctrl + alt + shift + d` / `control + option + shift + d`: Yoga Find End (Case Sensitive).
 
 ## Extension Settings
 
@@ -34,17 +36,15 @@ A general-purpose motion plugin for vscode. Search and jump to anywhere!
 
 ## Release Notes
 
-### 0.0.2
+### 0.0.3
 
-Changes:
+- Support find end.
+
+### 0.0.2
 
 - Support customized alphabet.
 
 ### 0.0.1
-
-Initial release.
-
-Changes:
 
 - Search and jump.
 - Enable/disable case sensitive search.
