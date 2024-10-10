@@ -51,6 +51,14 @@
       {
         "command": "yoga.findWithCase",
         "title": "Yoga Find (Case Sensitive)"
+      },
+      {
+        "command": "yoga.findEnd",
+        "title": "Yoga Find End"
+      },
+      {
+        "command": "yoga.findEndWithCase",
+        "title": "Yoga Find End (Case Sensitive)"
       }
     ],
     "keybindings": [
@@ -61,6 +69,14 @@
       {
         "command": "yoga.findWithCase",
         "key": "ctrl+alt+shift+s"
+      },
+      {
+        "command": "yoga.findEnd",
+        "key": "ctrl+alt+d"
+      },
+      {
+        "command": "yoga.findEndWithCase",
+        "key": "ctrl+alt+shift+d"
       }
     ],
     "configuration": [

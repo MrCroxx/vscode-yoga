@@ -11,7 +11,8 @@ export class YogaOptions {
 
 export class YogaContext {
     constructor(
-        public readonly matchCase: boolean
+        public readonly matchCase: boolean,
+        public readonly jumpToEnd: boolean,
     ) { }
 }
 
@@ -140,13 +141,14 @@ export class Yoga {
     }
 
     // Jump to the position if hit a trap.
-    private trap(input: string): boolean {
-        const trap = this.traps.get(input);
+    private trap(lastInput: string): boolean {
+        const trap = this.traps.get(lastInput);
         if (!trap) {
             return false;
         }
         vscode.window.showTextDocument(trap.editor.document.uri, { preview: false, viewColumn: trap.editor.viewColumn });
-        trap.editor.selections = [new vscode.Selection(trap.range.start, trap.range.start)];
+        const pos = this.context.jumpToEnd ? trap.range.end : trap.range.start;
+        trap.editor.selections = [new vscode.Selection(pos, pos)];
         this.hide();
         return true;
     }
