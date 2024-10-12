@@ -120,7 +120,7 @@ export class Yoga {
         for (const match of matches) {
             const label = labels.values().next().value || "";
             labels.delete(label);
-            const candidate = new Candidate(label, match.editor, match.range, match.nextCharacter);
+            const candidate = new Candidate(label, match.editor, match.range, match.nextCharacter, this.context.jumpToEnd);
             this.candidates.push(candidate);
             if (candidate.label !== "") {
                 this.traps.set(candidate.label, candidate);
@@ -179,28 +179,23 @@ class Candidate {
         public readonly label: string,
         public readonly editor: vscode.TextEditor,
         public readonly range: vscode.Range,
-        public readonly nextCharacter: string
+        public readonly nextCharacter: string,
+        public readonly suffix: boolean,
     ) {
+        const style = {
+            contentText: label,
+            color: "var(--vscode-editor-background)",
+            backgroundColor: "var(--vscode-editor-foreground)",
+            fontWeight: "bold",
+            border: "2px solid var(--vscode-editor-foreground)",
+        };
+        const attach = suffix ? { after: style } : { before: style };
+        const decoration = label !== "" ? attach : undefined;
+
         this.decorationType = vscode.window.createTextEditorDecorationType({
             backgroundColor: "var(--vscode-editor-findMatchHighlightBackground)",
-            light: label !== "" ? {
-                after: {
-                    contentText: label,
-                    color: "var(--vscode-editor-background)",
-                    backgroundColor: "var(--vscode-editor-foreground)",
-                    fontWeight: "bold",
-                    border: "2px solid var(--vscode-editor-foreground)",
-                }
-            } : undefined,
-            dark: label !== "" ? {
-                after: {
-                    contentText: label,
-                    color: "var(--vscode-editor-background)",
-                    backgroundColor: "var(--vscode-editor-foreground)",
-                    fontWeight: "bold",
-                    border: "2px solid var(--vscode-editor-foreground)",
-                }
-            } : undefined,
+            light: decoration,
+            dark: decoration,
         });
     }
 }

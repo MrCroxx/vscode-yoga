@@ -36,6 +36,10 @@ A general-purpose motion plugin for vscode. Search and jump to anywhere!
 
 ## Release Notes
 
+### Unreleased
+
+- Sanity-Healthy decoration.
+
 ### 0.0.3
 
 - Support find end.
