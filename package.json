@@ -2,7 +2,7 @@
   "name": "yoga",
   "displayName": "Yoga",
   "description": "Yet another leap.nvim for vscode.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "publisher": "MrCroxx",
   "license": "MIT",
   "icon": "assets/logo.png",
